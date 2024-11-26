@@ -20,22 +20,22 @@ struct ContentView: View {
     @State var isSheetSecondPresented = false
     
     @State var isGalleryPresented = false
+    @State var isCameraPresented = false
     
     var body: some View {
         NavigationStack {
-            
             Form {
                 
                 imageView
                 
                 Section("Default Camera") {
-                    CameraButton(item: mockImage)
+                    CameraButton(item: mockImage, isCameraPresented: $isCameraPresented)
                 }
                 Section("Default Camera with useUserPreferredCamera") {
-                    CameraButton(item: mockImage, useUserPreferredCamera: true)
+                    CameraButton(item: mockImage, useUserPreferredCamera: true, isCameraPresented: $isCameraPresented)
                 }
                 Section("Camera with dismiss button") {
-                    CameraButton(item: mockImage, leadingButton: .dismiss)
+                    CameraButton(item: mockImage, leadingButton: .dismiss, isCameraPresented: $isCameraPresented)
                 }
                 Section("Photo & Galery & dismiss button") {
                     Button {
@@ -56,7 +56,7 @@ struct ContentView: View {
             }
             .sheet(isPresented: $isSheetFirstPresented) {
                 HStack {
-                    CameraButton(item: mockImage, leadingButton: .dismiss, showImageSnapshotSheet: true, saveInLibrary: false)
+                    CameraButton(item: mockImage, leadingButton: .dismiss, showImageSnapshotSheet: true, saveInLibrary: false, isCameraPresented: $isCameraPresented)
                     GalleryButton(item: mockImage, toolbarItemContent: {
                         Button("", systemImage: "xmark") {
                             isGalleryPresented = false
@@ -68,7 +68,7 @@ struct ContentView: View {
             }
             .sheet(isPresented: $isSheetSecondPresented) {
                 HStack {
-                    CameraButton(item: mockImage)
+                    CameraButton(item: mockImage, isCameraPresented: $isCameraPresented)
                     GalleryButton(item: mockImage, label: {
                         Text("Galery")
                             .bold()

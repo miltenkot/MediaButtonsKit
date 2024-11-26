@@ -34,31 +34,35 @@ public struct GalleryButton<Item: PhotoItem, Text: View, Label: View, ToolbarIte
         Button {
             isGalleryPresented = true
         } label: {
-            Group {
-                if label is EmptyView {
-                    SwiftUI.Label {
-                        text
-                    } icon: {
-                        ThumbnailView(image: galery.thumbnailImage)
-                    }
-                } else {
-                    label
-                }
-            }
-            .fullScreenCover(isPresented: $isGalleryPresented) {
-                NavigationStack {
-                    PhotoCollectionView(item: item, photoCollection: galery.photoCollection, isPresented: $isGalleryPresented)
-                        .toolbar {
-                            ToolbarItem(placement: toolbarItemPlacement) {
-                                toolbarItemContent
+            buttonLabel
+                .frame(maxWidth: .infinity)
+                .fullScreenCover(isPresented: $isGalleryPresented) {
+                    NavigationStack {
+                        PhotoCollectionView(item: item, photoCollection: galery.photoCollection, isPresented: $isGalleryPresented)
+                            .toolbar {
+                                ToolbarItem(placement: toolbarItemPlacement) {
+                                    toolbarItemContent
+                                }
                             }
-                        }
+                    }
                 }
-            }
         }
         .task {
             await galery.loadPhotos()
             await galery.loadThumbnail()
+        }
+    }
+    
+    @ViewBuilder
+    private var buttonLabel: some View {
+        if label is EmptyView {
+            SwiftUI.Label {
+                text
+            } icon: {
+                ThumbnailView(image: galery.thumbnailImage)
+            }
+        } else {
+            label
         }
     }
 }

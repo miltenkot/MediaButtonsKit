@@ -22,7 +22,7 @@ public var defaultCameraLabel: some View {
     }
 }
 
-public struct CameraButton<Item: PhotoItem, Label: View>: View {
+public struct CameraButton<Item: PhotoItem, Label: View, ToolbarItemContent: View>: View {
     // Simulator doesn't support the AVFoundation capture APIs. Use the preview camera when running in Simulator.
     @Bindable var item: Item
     let label: Label
@@ -32,14 +32,20 @@ public struct CameraButton<Item: PhotoItem, Label: View>: View {
     let showImageSnapshotSheet: Bool
     let saveInLibrary: Bool
     
-    @State private var isCameraPresented = false
+    let toolbarItemContent: ToolbarItemContent
+    let toolbarItemPlacement: ToolbarItemPlacement
+    
+    @Binding var isCameraPresented: Bool
     
     public init(item: Item,
                 @ViewBuilder label: () -> Label = { defaultCameraLabel },
                 leadingButton: LeadingButton = .thumbnail,
                 useUserPreferredCamera: Bool = false,
                 showImageSnapshotSheet: Bool = false,
-                saveInLibrary: Bool = true) {
+                saveInLibrary: Bool = true,
+                @ViewBuilder toolbarItemContent: () -> ToolbarItemContent = { EmptyView() },
+                toolbarItemPlacement: ToolbarItemPlacement = .navigation,
+                isCameraPresented: Binding<Bool>) {
         self.item = item
         self.label = label()
         self.leadingButton = leadingButton
@@ -47,6 +53,9 @@ public struct CameraButton<Item: PhotoItem, Label: View>: View {
         self.showImageSnapshotSheet = showImageSnapshotSheet
         self.saveInLibrary = saveInLibrary
         self.camera = CameraModel(useUserPreferredCamera: useUserPreferredCamera, showImageSnapshotSheet: showImageSnapshotSheet, saveInLibrary: saveInLibrary)
+        self.toolbarItemContent = toolbarItemContent()
+        self.toolbarItemPlacement = toolbarItemPlacement
+        self._isCameraPresented = isCameraPresented
     }
     
     public var body: some View {
@@ -54,16 +63,15 @@ public struct CameraButton<Item: PhotoItem, Label: View>: View {
             isCameraPresented = true
         } label: {
             label
+                .frame(maxWidth: .infinity)
         }
         .fullScreenCover(isPresented: $isCameraPresented) {
             NavigationStack {
                 CameraView(item: item, camera: camera, leadingButton: leadingButton, isCameraPreviewPresented: $isCameraPresented)
                     .background(.black)
                     .toolbar {
-                        ToolbarItem(placement: .navigation) {
-                            Button("", systemImage: "xmark") {
-                                isCameraPresented = false
-                            }
+                        ToolbarItem(placement: toolbarItemPlacement) {
+                            toolbarItemContent
                         }
                     }
                     .task {
@@ -73,8 +81,4 @@ public struct CameraButton<Item: PhotoItem, Label: View>: View {
             }
         }
     }
-}
-
-#Preview {
-    CameraButton(item: MockPhotoItem())
 }

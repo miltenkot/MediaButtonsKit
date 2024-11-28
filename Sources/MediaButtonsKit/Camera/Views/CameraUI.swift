@@ -9,6 +9,7 @@ import SwiftUI
 import PhotosUI
 
 struct CameraUI<CameraModel: Camera>: View {
+    @Environment(\.dismiss) var dismiss
     @State var camera: CameraModel
     let leadingButton: LeadingButton
     @Binding var selectedItem: PhotosPickerItem?
@@ -23,6 +24,13 @@ struct CameraUI<CameraModel: Camera>: View {
         .overlay {
             StatusOverlayView(status: camera.status)
                 .ignoresSafeArea()
+                .onTapGesture {
+                    Task {
+                        await MainActor.run {
+                            dismiss()
+                        }
+                    }
+                }
         }
     }
 }

@@ -55,7 +55,7 @@ struct StatusOverlayView: View {
         }
     }
 }
-
+#if DEBUG
 #Preview("Interrupted") {
     CameraView(item: MockPhotoItem(), camera: PreviewCameraModel(status: .interrupted), leadingButton: .thumbnail, isCameraPreviewPresented: .constant(true))
 }
@@ -67,3 +67,4 @@ struct StatusOverlayView: View {
 #Preview("Unauthorized") {
     CameraView(item: MockPhotoItem(), camera: PreviewCameraModel(status: .unauthorized), leadingButton: .thumbnail, isCameraPreviewPresented: .constant(true))
 }
+#endif

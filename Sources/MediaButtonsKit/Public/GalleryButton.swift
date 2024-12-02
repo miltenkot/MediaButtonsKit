@@ -66,9 +66,10 @@ public struct GalleryButton<Item: PhotoItem, Text: View, Label: View, ToolbarIte
         }
     }
 }
-
+#if DEBUG
 #Preview {
     @Previewable @State var item = MockPhotoItem()
     @Previewable @State var isGalleryPresented = false
     GalleryButton(item: item, isGalleryPresented: $isGalleryPresented)
 }
+#endif

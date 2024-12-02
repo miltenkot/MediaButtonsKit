@@ -60,8 +60,9 @@ struct CameraView<CameraModel: Camera, Item: PhotoItem>: View {
             }
     }
 }
-
+#if DEBUG
 #Preview {
     CameraView(item: MockPhotoItem(), camera: PreviewCameraModel(), leadingButton: .thumbnail, isCameraPreviewPresented: .constant(true))
         .preferredColorScheme(.dark)
 }
+#endif

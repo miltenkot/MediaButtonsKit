@@ -26,6 +26,7 @@ actor CachedImageManager {
     private lazy var requestOptions: PHImageRequestOptions = {
         let options = PHImageRequestOptions()
         options.deliveryMode = .opportunistic
+        options.isNetworkAccessAllowed = true
         return options
     }()
     

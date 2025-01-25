@@ -36,7 +36,10 @@ struct PhotoAsset: Identifiable {
         
         let manager = PHImageManager.default()
         let options = PHImageRequestOptions()
-        options.version = .original
+        options.resizeMode = .none
+        options.isNetworkAccessAllowed = true
+        options.deliveryMode = .opportunistic
+        options.isSynchronous = true
         
         return await withCheckedContinuation { continuation in
             manager.requestImageDataAndOrientation(for: phAsset, options: options) { data, _, _, _ in

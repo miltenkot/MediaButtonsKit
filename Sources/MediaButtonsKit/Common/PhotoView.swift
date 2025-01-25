@@ -26,7 +26,14 @@ struct PhotoView<Item: PhotoItem>: View {
     private let imageSize = CGSize(width: 1024, height: 1024)
     
     
-    init(type: MediaType, item: Item, asset: PhotoAsset? = nil, cache: CachedImageManager? = nil, snapshot: Photo? = nil, isPresented: Binding<Bool>) {
+    init(
+        type: MediaType,
+        item: Item,
+        asset: PhotoAsset? = nil,
+        cache: CachedImageManager? = nil,
+        snapshot: Photo? = nil,
+        isPresented: Binding<Bool>
+    ) {
         self.type = type
         self.item = item
         self.asset = asset
@@ -116,4 +123,19 @@ fileprivate func buttonsView<F: View, S: View>(_ firstAction: @escaping () -> Vo
     .padding(EdgeInsets(top: 20, leading: 30, bottom: 20, trailing: 30))
     .background(Color.secondary.colorInvert())
     .cornerRadius(15)
+}
+
+#Preview {
+    buttonsView {
+        
+    } firstLabel: {
+        Label("Add", systemImage: "plus")
+            .font(.system(size: 24))
+    } secondAction: {
+        
+    } secondLabel: {
+        Label("Delete", systemImage: "trash")
+            .font(.system(size: 24))
+    }
+
 }

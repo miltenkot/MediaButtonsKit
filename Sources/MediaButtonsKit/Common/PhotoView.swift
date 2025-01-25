@@ -72,8 +72,16 @@ struct PhotoView<Item: PhotoItem>: View {
                     }
                 }
             }, firstLabel: {
-                Label("Add", systemImage: "plus")
-                    .font(.system(size: 24))
+                HStack {
+                    Label("Add", systemImage: "plus.circle.fill")
+                        .font(.largeTitle)
+                        .symbolRenderingMode(.multicolor)
+                    Text("Add")
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                }
+                .bold()
+                .fontDesign(.rounded)
             }, secondAction: {
                 Task {
                     if type == .library {
@@ -87,8 +95,16 @@ struct PhotoView<Item: PhotoItem>: View {
                     }
                 }
             }, secondLabel: {
-                Label("Delete", systemImage: "trash")
-                    .font(.system(size: 24))
+                HStack {
+                    Label("Delete", systemImage: "trash.circle.fill")
+                        .font(.largeTitle)
+                        .symbolRenderingMode(.multicolor)
+                    Text("Delete")
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                }
+                .bold()
+                .fontDesign(.rounded)
             })
             .offset(x: 0, y: -50)
         }
@@ -129,13 +145,29 @@ fileprivate func buttonsView<F: View, S: View>(_ firstAction: @escaping () -> Vo
     buttonsView {
         
     } firstLabel: {
-        Label("Add", systemImage: "plus")
-            .font(.system(size: 24))
+        HStack {
+            Label("Add", systemImage: "plus.circle.fill")
+                .font(.largeTitle)
+                .symbolRenderingMode(.multicolor)
+            Text("Add")
+                .font(.headline)
+                .foregroundStyle(.white)
+        }
+        .bold()
+        .fontDesign(.rounded)
     } secondAction: {
         
     } secondLabel: {
-        Label("Delete", systemImage: "trash")
-            .font(.system(size: 24))
+        HStack {
+            Label("Delete", systemImage: "trash.circle.fill")
+                .font(.largeTitle)
+                .symbolRenderingMode(.multicolor)
+            Text("Delete")
+                .font(.headline)
+                .foregroundStyle(.white)
+        }
+        .bold()
+        .fontDesign(.rounded)
     }
 
 }

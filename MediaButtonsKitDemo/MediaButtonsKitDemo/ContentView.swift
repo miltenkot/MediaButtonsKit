@@ -24,22 +24,30 @@ struct ContentView: View {
     @State private var activeSheet: ActiveSheet?
     
     @State var isGalleryPresented = false
-    @State var isCameraPresented = false
+    @State var isFirstCameraPresented = false
+    @State var isSecondCameraPresented = false
+    @State var isThirdCameraPresented = false
+    @State var isFourthCameraPresented = false
+    @State var isFifthCameraPresented = false
     
     var body: some View {
         NavigationStack {
             Form {
-                
                 imageView
                 
                 Section("Default Camera") {
-                    CameraButton(item: mockImage, isCameraPresented: $isCameraPresented)
+                    CameraButton(item: mockImage,
+                                 isCameraPresented: $isFirstCameraPresented)
                 }
                 Section("Default Camera with useUserPreferredCamera") {
-                    CameraButton(item: mockImage, useUserPreferredCamera: true, isCameraPresented: $isCameraPresented)
+                    CameraButton(item: mockImage,
+                                 useUserPreferredCamera: true,
+                                 isCameraPresented: $isSecondCameraPresented)
                 }
                 Section("Camera with dismiss button") {
-                    CameraButton(item: mockImage, leadingButton: .dismiss, isCameraPresented: $isCameraPresented)
+                    CameraButton(item: mockImage,
+                                 leadingButton: .dismiss,
+                                 isCameraPresented: $isThirdCameraPresented)
                 }
                 Section("Photo & Galery & dismiss button") {
                     Button {
@@ -70,7 +78,7 @@ struct ContentView: View {
     @ViewBuilder
     private var firstSheet: some View {
         HStack {
-            CameraButton(item: mockImage, leadingButton: .dismiss, showImageSnapshotSheet: true, saveInLibrary: false, isCameraPresented: $isCameraPresented)
+            CameraButton(item: mockImage, leadingButton: .dismiss, showImageSnapshotSheet: true, saveInLibrary: false, isCameraPresented: $isFourthCameraPresented)
             GalleryButton(item: mockImage, toolbarItemContent: {
                 Button("", systemImage: "xmark") {
                     isGalleryPresented = false
@@ -83,7 +91,7 @@ struct ContentView: View {
     @ViewBuilder
     private var secondSheet: some View {
         HStack {
-            CameraButton(item: mockImage, isCameraPresented: $isCameraPresented)
+            CameraButton(item: mockImage, isCameraPresented: $isFifthCameraPresented)
             GalleryButton(item: mockImage, label: {
                 Text("Galery")
                     .bold()

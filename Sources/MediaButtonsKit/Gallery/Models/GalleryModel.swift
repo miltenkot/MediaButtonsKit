@@ -13,7 +13,7 @@ final class GalleryModel {
     /// The photo collection instance responsible for managing photo assets.
     let photoCollection: PhotoCollection
     /// The thumbnail image of the first photo asset in the collection.
-    var thumbnailImage: Image?
+    @MainActor var thumbnailImage: Image?
     
     private let photoLibraryAuthorization: PhotoLibraryAuthorization
     
@@ -54,16 +54,14 @@ final class GalleryModel {
             return
         }
         
-        // Attempt to load the photo collection.
-        Task {
-            do {
-                try await self.photoCollection.load()
-                await self.loadThumbnail()
-            } catch let error {
-                logger.error("Failed to load photo collection: \(error.localizedDescription)")
-            }
-            self.isPhotosLoaded = true
+        do {
+            try await self.photoCollection.load()
+            await self.loadThumbnail()
+        } catch let error {
+            logger.error("Failed to load photo collection: \(error.localizedDescription)")
         }
+        
+        self.isPhotosLoaded = true
     }
     
     /// Loads a thumbnail image for the first photo asset in the collection.
@@ -73,10 +71,10 @@ final class GalleryModel {
         guard let asset = photoCollection.photoAssets.first else { return }
         
         // Request a thumbnail image of the specified size from the photo cache.
-        await photoCollection.cache.requestImage(for: asset, targetSize: CGSize(width: 256, height: 256))  { @Sendable result in
+        await photoCollection.cache.requestImage(for: asset, targetSize: CGSize(width: 256, height: 256))  { @Sendable [weak self] result in
             if let result = result {
                 Task { @MainActor in
-                    self.thumbnailImage = result.image
+                    self?.thumbnailImage = result.image
                     logger.info("thumbnailImage loaded")
                 }
             }

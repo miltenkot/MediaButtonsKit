@@ -39,6 +39,7 @@ struct CameraView<CameraModel: Camera, Item: PhotoItem>: View {
                     /// starts, then immediately changes to `false`. Use this to
                     /// flash the screen to provide visual feedback.
                     .opacity(camera.shouldFlashScreen ? 0 : 1)
+                    .swipeToDismiss($isCameraPreviewPresented)
             }
             CameraUI(camera: camera, leadingButton: leadingButton, selectedItem: $selectedItem)
                 .onChange(of: selectedItem) { oldValue, newValue in

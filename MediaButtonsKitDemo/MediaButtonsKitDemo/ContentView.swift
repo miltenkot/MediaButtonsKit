@@ -15,9 +15,13 @@ class MockPhotoItem: PhotoItem {
 
 struct ContentView: View {
     
+    enum ActiveSheet: Identifiable {
+        var id: Self { self }
+        case first, second
+    }
+    
     @State var mockImage = MockPhotoItem()
-    @State var isSheetFirstPresented = false
-    @State var isSheetSecondPresented = false
+    @State private var activeSheet: ActiveSheet?
     
     @State var isGalleryPresented = false
     @State var isCameraPresented = false
@@ -39,7 +43,7 @@ struct ContentView: View {
                 }
                 Section("Photo & Galery & dismiss button") {
                     Button {
-                        isSheetFirstPresented = true
+                        activeSheet = .first
                     } label: {
                         Text("Show sheet")
                             .bold()
@@ -47,49 +51,58 @@ struct ContentView: View {
                 }
                 Section("Photo & Custom Galery Button") {
                     Button {
-                        isSheetSecondPresented = true
+                        activeSheet = .second
                     } label: {
                         Text("Show sheet")
                             .bold()
                     }
                 }
             }
-            .sheet(isPresented: $isSheetFirstPresented) {
-                HStack {
-                    CameraButton(item: mockImage, leadingButton: .dismiss, showImageSnapshotSheet: true, saveInLibrary: false, isCameraPresented: $isCameraPresented)
-                    GalleryButton(item: mockImage, toolbarItemContent: {
-                        Button("", systemImage: "xmark") {
-                            isGalleryPresented = false
-                        }
-                    }, isGalleryPresented: $isGalleryPresented)
+            .sheet(item: $activeSheet) { item in
+                switch item {
+                case .first: firstSheet
+                case .second: secondSheet
                 }
-                .padding()
-                .presentationDetents([.height(200)])
-            }
-            .sheet(isPresented: $isSheetSecondPresented) {
-                HStack {
-                    CameraButton(item: mockImage, isCameraPresented: $isCameraPresented)
-                    GalleryButton(item: mockImage, label: {
-                        Text("Galery")
-                            .bold()
-                    }, toolbarItemContent: {
-                        Button {
-                            isGalleryPresented = false
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.system(size: 24))
-                                .fontDesign(.rounded)
-                                .symbolRenderingMode(.hierarchical)
-                                .foregroundStyle(.gray)
-                        }
-                    },
-                                  toolbarItemPlacement: .topBarTrailing,
-                                  isGalleryPresented: $isGalleryPresented)
-                }
-                .padding()
-                .presentationDetents([.height(200)])
             }
         }
+    }
+    
+    @ViewBuilder
+    private var firstSheet: some View {
+        HStack {
+            CameraButton(item: mockImage, leadingButton: .dismiss, showImageSnapshotSheet: true, saveInLibrary: false, isCameraPresented: $isCameraPresented)
+            GalleryButton(item: mockImage, toolbarItemContent: {
+                Button("", systemImage: "xmark") {
+                    isGalleryPresented = false
+                }
+            }, isGalleryPresented: $isGalleryPresented)
+        }
+        .padding()
+        .presentationDetents([.height(200)])
+    }
+    @ViewBuilder
+    private var secondSheet: some View {
+        HStack {
+            CameraButton(item: mockImage, isCameraPresented: $isCameraPresented)
+            GalleryButton(item: mockImage, label: {
+                Text("Galery")
+                    .bold()
+            }, toolbarItemContent: {
+                Button {
+                    isGalleryPresented = false
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 24))
+                        .fontDesign(.rounded)
+                        .symbolRenderingMode(.hierarchical)
+                        .foregroundStyle(.gray)
+                }
+            },
+                          toolbarItemPlacement: .topBarTrailing,
+                          isGalleryPresented: $isGalleryPresented)
+        }
+        .padding()
+        .presentationDetents([.height(200)])
     }
     
     @ViewBuilder

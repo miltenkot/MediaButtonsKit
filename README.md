@@ -1,4 +1,5 @@
- ![logo](https://github.com/user-attachments/assets/f9a67845-45bb-432e-b629-ff15635ab2a7) 
+ ![logo](https://github.com/user-attachments/assets/390aac56-6e4d-4777-af49-b28062456cfe)
+
  # MediaButtonsKit
 
 MediaButtonsKit is a lightweight and easy-to-use SwiftUI library that lets you quickly add camera and photo gallery buttons to your app – no boilerplate code required!
